@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="description"
+    content="Windows setup guide for yt-dlp and supporting tools. Use only with content you are authorized to download.">
+
+  <title>yt-dlp Membership</title>
+
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #0f141b;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --line: #30363d;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --yellow: #d29922;
+      --red: #f85149;
+      --code: #010409;
+      --hover: #21262d;
+      --max-width: 950px;
+      --sidebar-width: 275px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 30px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* =========================
+       LANGUAGE
+    ========================== */
+
+    body.lang-id .en,
+    body.lang-id .en-only {
+      display: none !important;
+    }
+
+    body.lang-en .id,
+    body.lang-en .id-only {
+      display: none !important;
+    }
+
+    /* =========================
+       LAYOUT
+    ========================== */
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    main {
+      width: min(var(--max-width), 100%);
+      margin-left: var(--sidebar-width);
+      padding: 55px 58px 90px;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================== */
+
+    .sidebar {
+      position: fixed;
+      z-index: 20;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      overflow-y: auto;
+      background: #010409;
+      border-right: 1px solid var(--line);
+      padding: 28px 18px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 25px;
+    }
+
+    .nav-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin: 20px 10px 7px;
+    }
+
+    nav a {
+      display: block;
+      padding: 7px 10px;
+      border-radius: 6px;
+      color: #c9d1d9;
+      font-size: 14px;
+      transition:
+        background .15s ease,
+        color .15s ease;
+    }
+
+    nav a:hover {
+      background: var(--panel);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* =========================
+       LANGUAGE SWITCHER
+    ========================== */
+
+    .lang-switch {
+      position: fixed;
+      right: 24px;
+      top: 18px;
+      z-index: 50;
+
+      display: flex;
+      gap: 3px;
+      padding: 3px;
+
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
+    }
+
+    .lang-switch button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .lang-switch button:hover {
+      background: var(--hover);
+      color: #fff;
+    }
+
+    .lang-switch button.active {
+      background: var(--hover);
+      color: #fff;
+    }
+
+    /* =========================
+       HERO
+    ========================== */
+
+    .hero {
+      padding: 25px 0 38px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.12;
+      letter-spacing: -.035em;
+      margin: 0 0 15px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #c9d1d9;
+    }
+
+    /* =========================
+       CONTENT
+    ========================== */
+
+    section {
+      padding: 40px 0 5px;
+    }
+
+    h2 {
+      font-size: 29px;
+      line-height: 1.25;
+      margin: 0 0 18px;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin: 28px 0 12px;
+    }
+
+    p,
+    li {
+      color: #c9d1d9;
+    }
+
+    li+li {
+      margin-top: 6px;
+    }
+
+    /* =========================
+       NOTICE / CARDS
+    ========================== */
+
+    .notice {
+      padding: 16px 18px;
+      margin: 20px 0;
+      border: 1px solid #6e5a20;
+      border-left: 4px solid var(--yellow);
+      background: #1c1a13;
+      border-radius: 7px;
+    }
+
+    .notice strong {
+      color: #e3b341;
+    }
+
+    .danger {
+      border-color: #6e3030;
+      border-left-color: var(--red);
+      background: #1c1214;
+    }
+
+    .danger strong {
+      color: #ff7b72;
+    }
+
+    .success {
+      border-color: #286238;
+      border-left-color: var(--green);
+      background: #101b14;
+    }
+
+    .success strong {
+      color: #56d364;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 18px;
+      margin: 18px 0;
+    }
+
+    /* =========================
+       TABLE
+    ========================== */
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 18px 0;
+    }
+
+    table {
+      width: 100%;
+      min-width: 550px;
+      border-collapse: collapse;
+      background: var(--panel);
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      background: #1c2128;
+      color: #fff;
+    }
+
+    td {
+      color: #c9d1d9;
+    }
+
+    /* =========================
+       CODE
+    ========================== */
+
+    .code-block {
+      position: relative;
+      margin: 15px 0;
+    }
+
+    pre {
+      position: relative;
+      background: var(--code);
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 17px;
+      padding-right: 90px;
+      overflow-x: auto;
+      margin: 0;
+      color: #e6edf3;
+    }
+
+    code {
+      font-family:
+        "Cascadia Code",
+        "Fira Code",
+        Consolas,
+        monospace;
+      font-size: 13px;
+      white-space: pre;
+    }
+
+    .inline {
+      padding: 2px 5px;
+      background: #161b22;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .copy {
+      position: absolute;
+      right: 9px;
+      top: 9px;
+
+      z-index: 2;
+
+      background: var(--panel);
+      color: #c9d1d9;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px 9px;
+
+      cursor: pointer;
+      font-size: 12px;
+
+      transition:
+        background .15s ease,
+        color .15s ease;
+    }
+
+    .copy:hover {
+      background: var(--hover);
+      color: #fff;
+    }
+
+    .copy.copied {
+      color: #56d364;
+      border-color: #286238;
+    }
+
+    /* =========================
+       STEPS
+    ========================== */
+
+    .step {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 14px;
+      margin: 28px 0;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+
+      border: 1px solid #388bfd;
+      border-radius: 50%;
+
+      display: grid;
+      place-items: center;
+
+      color: var(--accent);
+      font-weight: 700;
+      background: #0d1722;
+    }
+
+    /* =========================
+       VIDEO PLACEHOLDER
+    ========================== */
+
+    .video-placeholder {
+      position: relative;
+
+      aspect-ratio: 16 / 9;
+
+      border: 1px solid var(--line);
+      border-radius: 10px;
+
+      overflow: hidden;
+
+      background:
+        radial-gradient(circle at center,
+          #182536 0,
+          #0d1117 65%);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      text-align: center;
+    }
+
+    .video-placeholder::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background-image:
+        linear-gradient(#30363d 1px,
+          transparent 1px),
+        linear-gradient(90deg,
+          #30363d 1px,
+          transparent 1px);
+
+      background-size: 42px 42px;
+      opacity: .12;
+    }
+
+    .video-placeholder>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .play {
+      width: 72px;
+      height: 72px;
+
+      border-radius: 50%;
+      background: var(--accent);
+
+      display: grid;
+      place-items: center;
+
+      color: white;
+      font-size: 28px;
+
+      padding-left: 4px;
+
+      box-shadow:
+        0 0 35px rgba(88, 166, 255, .22);
+    }
+
+    .video-placeholder h3 {
+      margin: 17px 0 4px;
+    }
+
+    .video-placeholder p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .coming {
+      margin-top: 13px;
+
+      border: 1px solid var(--line);
+      background: var(--panel);
+
+      border-radius: 999px;
+      padding: 4px 11px;
+
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* =========================
+       FAQ
+    ========================== */
+
+    details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 12px 0;
+
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 14px 17px;
+      cursor: pointer;
+      font-weight: 600;
+
+      transition: background .15s ease;
+    }
+
+    summary:hover {
+      background: var(--hover);
+    }
+
+    details .answer {
+      padding: 0 17px 16px;
+    }
+
+    details[open] summary {
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* =========================
+       FOOTER
+    ========================== */
+
+    footer {
+      border-top: 1px solid var(--line);
+      margin-top: 65px;
+      padding-top: 25px;
+
+      text-align: center;
+
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================
+       FOCUS
+    ========================== */
+
+    a:focus-visible,
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 850px) {
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        width: 100%;
+        margin-left: 0;
+        padding: 75px 20px 60px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .step {
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+      }
+
+      .lang-switch {
+        right: 15px;
+        top: 12px;
+      }
+
+      .video-placeholder {
+        min-height: 220px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      main {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .hero h1 {
+        font-size: 31px;
+      }
+
+      h2 {
+        font-size: 25px;
+      }
+
+      pre {
+        padding: 14px;
+        padding-right: 14px;
+        padding-top: 48px;
+      }
+
+      .copy {
+        top: 8px;
+        right: 8px;
+      }
+
+      .badges {
+        gap: 6px;
+      }
+
+      .badge {
+        font-size: 11px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="lang-en">
+
+  <!-- =========================
+       LANGUAGE SWITCHER
+  ========================== -->
+
+  <div class="lang-switch" aria-label="Language selector">
+    <button id="idBtn" type="button" aria-label="Bahasa Indonesia" onclick="setLanguage('id')">
+      🇮🇩 ID
+    </button>
+
+    <button id="enBtn" class="active" type="button" aria-label="English" onclick="setLanguage('en')">
+      🇬🇧 EN
+    </button>
+  </div>
+
+  <div class="layout">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+      <div class="logo">📺 yt-dlp Guide</div>
+
+      <div class="nav-title">
+        <span class="en">Guide</span>
+        <span class="id">Panduan</span>
+      </div>
+
+      <nav>
+        <a href="#overview">
+          <span class="en">Overview</span>
+          <span class="id">Pendahuluan</span>
+        </a>
+
+        <a href="#prerequisites">
+          <span class="en">Prerequisites</span>
+          <span class="id">Persyaratan</span>
+        </a>
+
+        <a href="#step1">Step 1 — Chrome</a>
+        <a href="#step2">Step 2 — Python</a>
+        <a href="#step3">Step 3 — Node.js</a>
+        <a href="#step4">Step 4 — Deno</a>
+        <a href="#step5">Step 5 — FFmpeg</a>
+        <a href="#step6">Step 6 — yt-dlp</a>
+        <a href="#step7">Step 7 — yt-dlp-ejs</a>
+        <a href="#step8">Step 8 — Verify</a>
+        <a href="#step9">Step 9 — Export Cookies</a>
+        <a href="#step10">Step 10 — Download</a>
+
+        <a href="#folder">
+          <span class="en">Specific Folder</span>
+          <span class="id">Folder Khusus</span>
+        </a>
+
+        <a href="#tutorial">
+          <span class="en">Video Tutorial</span>
+          <span class="id">Video Tutorial</span>
+        </a>
+
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="nav-title">
+        <span class="en">Important</span>
+        <span class="id">Penting</span>
+      </div>
+
+      <nav>
+        <a href="#disclaimer">Disclaimer</a>
+      </nav>
+
+    </aside>
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main>
+
+      <!-- HERO -->
+
+      <header class="hero">
+
+        <h1>
+          <span class="en">yt-dlp Membership Download </span>
+          <span class="id">Panduan Download Video Membership yt-dlp</span>
+        </h1>
+
+        <p class="en">
+          A Windows setup guide for yt-dlp and its supporting tools.
+          Use these tools only with content you are authorized to download.
+        </p>
+
+        <p class="id">
+          Panduan setup Windows untuk yt-dlp dan tools pendukungnya.
+          Gunakan tools ini hanya untuk konten yang memang kamu berhak
+          download.
+        </p>
+
+        <div class="badges">
+          <span class="badge">🪟 Windows 10 / 11</span>
+          <span class="badge">🌐 Google Chrome</span>
+          <span class="badge">🐍 Python</span>
+          <span class="badge">🟢 Node.js</span>
+          <span class="badge">🎞️ FFmpeg</span>
+          <span class="badge">⬇️ yt-dlp</span>
+        </div>
+
+      </header>
+
+      <!-- OVERVIEW -->
+
+      <section id="overview">
+
+        <h2>
+          📖
+          <span class="en">Overview</span>
+          <span class="id">Pendahuluan</span>
+        </h2>
+
+        <p class="en">
+          This guide explains how to prepare a Windows computer for
+          yt-dlp and related tools.
+        </p>
+
+        <p class="id">
+          Panduan ini menjelaskan cara mempersiapkan komputer Windows
+          untuk yt-dlp dan tools terkait.
+        </p>
+
+        <div class="notice">
+
+          <strong>
+            ⚠️
+            <span class="en">Important:</span>
+            <span class="id">Penting:</span>
+          </strong>
+
+          <span class="en">
+            Use yt-dlp only for content you are legally authorized
+            to download. Respect copyright and platform rules.
+          </span>
+
+          <span class="id">
+            Gunakan yt-dlp hanya untuk konten yang secara hukum memang
+            boleh kamu download. Hormati hak cipta dan aturan platform.
+          </span>
+
+        </div>
+
+      </section>
+
+      <!-- PREREQUISITES -->
+
+      <section id="prerequisites">
+
+        <h2>
+          📋
+          <span class="en">Prerequisites</span>
+          <span class="id">Persyaratan</span>
+        </h2>
+
+        <ul>
+          <li>Windows 10 or Windows 11</li>
+          <li>Google Chrome</li>
+          <li>Python 3.x</li>
+          <li>Node.js LTS</li>
+          <li>Deno</li>
+          <li>FFmpeg</li>
+        </ul>
+
+      </section>
+
+      <!-- STEP 1 -->
+
+      <section id="step1">
+
+        <div class="step">
+
+          <div class="step-number">1</div>
+
+          <div>
+
+            <h2>
+              <span class="en">Prepare Google Chrome</span>
+              <span class="id">Siapkan Google Chrome</span>
+            </h2>
+
+            <ol>
+
+              <li>
+                <span class="en">
+                  Install Google Chrome if it is not already installed.
+                </span>
+
+                <span class="id">
+                  Install Google Chrome jika belum terpasang.
+                </span>
+              </li>
+
+              <li>
+                <span class="en">
+                  Sign in to the account that has legitimate access
+                  to the content you want to use.
+                </span>
+
+                <span class="id">
+                  Login ke akun yang memiliki akses sah ke konten
+                  yang ingin digunakan.
+                </span>
+              </li>
+
+              <li>
+                <span class="en">
+                  Verify that the content can be accessed normally, not a private video.
+                </span>
+
+                <span class="id">
+                  Pastikan konten dapat diakses secara normal, bukan private video.
+                </span>
+              </li>
+
+            </ol>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 2 -->
+
+      <section id="step2">
+
+        <div class="step">
+
+          <div class="step-number">2</div>
+
+          <div>
+
+            <h2>Install Python</h2>
+
+            <ol>
+
+              <li>
+                <span class="en">
+                  Download Python from
+                </span>
+
+                <span class="id">
+                  Download Python dari
+                </span>
+
+                <a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer">
+                  python.org
+                </a>.
+              </li>
+
+              <li>
+                <span class="en">
+                  During installation, enable
+                </span>
+
+                <span class="id">
+                  Saat instalasi, aktifkan
+                </span>
+
+                <strong>Add Python to PATH</strong>.
+              </li>
+
+              <li>
+                <span class="en">
+                  Finish the installation.
+                </span>
+
+                <span class="id">
+                  Selesaikan instalasi.
+                </span>
+              </li>
+
+            </ol>
+
+            <p>
+              <strong>
+                <span class="en">Verify:</span>
+                <span class="id">Verifikasi:</span>
+              </strong>
+            </p>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>python --version</code></pre>
+            </div>
+
+            <p>
+              <span class="en">Example:</span>
+              <span class="id">Contoh:</span>
+            </p>
+
+            <div class="code-block">
+              <pre><code>Python 3.x.x</code></pre>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 3 -->
+
+      <section id="step3">
+
+        <div class="step">
+
+          <div class="step-number">3</div>
+
+          <div>
+
+            <h2>Install Node.js</h2>
+
+            <ol>
+
+              <li>
+                <span class="en">Download Node.js LTS from</span>
+                <span class="id">Download Node.js LTS dari</span>
+
+                <a href="https://nodejs.org/" target="_blank" rel="noopener noreferrer">
+                  nodejs.org
+                </a>.
+              </li>
+
+              <li>
+                <span class="en">
+                  Install it using the default options.
+                </span>
+
+                <span class="id">
+                  Install menggunakan opsi default.
+                </span>
+              </li>
+
+            </ol>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>node --version
+npm.cmd --version</code></pre>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 4 -->
+
+      <section id="step4">
+
+        <div class="step">
+
+          <div class="step-number">4</div>
+
+          <div>
+
+            <h2>Install Deno</h2>
+
+            <p class="en">
+              Deno is an alternative JavaScript runtime. It may be
+              useful for some yt-dlp JavaScript-related configurations.
+            </p>
+
+            <p class="id">
+              Deno adalah JavaScript runtime alternatif. Deno dapat
+              berguna untuk beberapa konfigurasi yt-dlp yang berkaitan
+              dengan JavaScript.
+            </p>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>irm https://deno.land/install.ps1 | iex</code></pre>
+            </div>
+
+            <p>
+              <strong>
+                <span class="en">Verify:</span>
+                <span class="id">Verifikasi:</span>
+              </strong>
+            </p>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>deno --version</code></pre>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 5 -->
+
+      <section id="step5">
+
+        <div class="step">
+
+          <div class="step-number">5</div>
+
+          <div>
+
+            <h2>Install FFmpeg</h2>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>winget install Gyan.FFmpeg</code></pre>
+            </div>
+
+            <div class="notice">
+
+              <strong>⚠️</strong>
+
+              <span class="en">
+                After installation, completely close PowerShell or CMD
+                and open a new terminal so the updated PATH can be loaded.
+              </span>
+
+              <span class="id">
+                Setelah instalasi, tutup PowerShell atau CMD sepenuhnya
+                lalu buka terminal baru agar PATH yang diperbarui dapat
+                terbaca.
+              </span>
+
+            </div>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>ffmpeg -version</code></pre>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 6 -->
+
+      <section id="step6">
+
+        <div class="step">
+
+          <div class="step-number">6</div>
+
+          <div>
+
+            <h2>Install yt-dlp</h2>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>python -m pip install -U yt-dlp</code></pre>
+            </div>
+
+            <p>
+              <strong>
+                <span class="en">Verify:</span>
+                <span class="id">Verifikasi:</span>
+              </strong>
+            </p>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>python -m yt_dlp --version</code></pre>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 7 -->
+
+      <section id="step7">
+
+        <div class="step">
+
+          <div class="step-number">7</div>
+
+          <div>
+
+            <h2>Install yt-dlp-ejs</h2>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>python -m pip install -U yt-dlp-ejs</code></pre>
+            </div>
+
+            <p class="en">
+              This package provides JavaScript-related support for
+              supported yt-dlp configurations.
+            </p>
+
+            <p class="id">
+              Package ini menyediakan dukungan terkait JavaScript
+              untuk konfigurasi yt-dlp yang didukung.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 8 -->
+
+      <section id="step8">
+
+        <div class="step">
+
+          <div class="step-number">8</div>
+
+          <div>
+
+            <h2>
+              <span class="en">Verify Everything</span>
+              <span class="id">Verifikasi Semuanya</span>
+            </h2>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>python --version
+node --version
+npm.cmd --version
+deno --version
+ffmpeg -version
+python -m yt_dlp --version</code></pre>
+            </div>
+
+            <div class="card success">
+
+              <strong>✓</strong>
+
+              <span class="en">
+                All available commands should display version information
+                without errors.
+              </span>
+
+              <span class="id">
+                Semua command yang tersedia seharusnya menampilkan
+                informasi versi tanpa error.
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 9 -->
+
+      <section id="step9">
+
+        <div class="step">
+
+          <div class="step-number">9</div>
+
+          <div>
+
+            <h2>
+              <span class="en">Export Cookies</span>
+              <span class="id">Export Cookies</span>
+            </h2>
+
+            <p class="en">
+              Make sure the account you use has permission to access
+              the content. Do not attempt to bypass membership,
+              DRM, authentication controls, or other access restrictions.
+            </p>
+
+            <p class="id">
+              Pastikan akun yang digunakan memang memiliki izin untuk
+              mengakses konten. Jangan mencoba bypass membership,
+              DRM, kontrol autentikasi, atau pembatasan akses lainnya.
+            </p>
+
+            <div class="notice danger">
+
+              <strong>
+                🔐
+                <span class="en">Security:</span>
+                <span class="id">Keamanan:</span>
+              </strong>
+
+              <span class="en">
+                Never publish session tokens, browser cookies,
+                authentication files, or other account credentials.
+              </span>
+
+              <span class="id">
+                Jangan pernah mempublikasikan session token,
+                cookie browser, file autentikasi, atau kredensial akun
+                lainnya.
+              </span>
+
+            </div>
+
+            <ol>
+
+              <li>
+                <span class="en">
+                  Open YouTube in Chrome.
+                </span>
+
+                <span class="id">
+                  Buka YouTube di Chrome.
+                </span>
+
+              </li>
+
+              <li>
+                <span class="en">
+                  Make sure you are logged in.
+                </span>
+
+                <span class="id">
+                  Pastikan sudah login
+                </span>
+
+              </li>
+
+              <li>
+                <span class="en">
+                  Click the extension icon.
+                </span>
+
+                <span class="id">
+                  Klik ikon ekstensi pada browser.
+                </span>
+              </li>
+
+              <li>
+                <span class="en">
+                  Export cookies in Netscape format.
+                </span>
+
+                <span class="id">
+                  Eskpor cookies sebagai Netscape format.
+                </span>
+              </li>
+
+              <li>
+                <span class="en">
+                  Save the file as
+                </span>
+
+                <span class="id">
+                  Simpan file dengan nama
+                </span>
+
+                <div class="code-block">
+                  <pre><button class="copy" type="button">Copy</button><code>cookies.txt</code></pre>
+                </div>
+
+              </li>
+
+            </ol>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STEP 10 -->
+
+      <section id="step10">
+
+        <div class="step">
+
+          <div class="step-number">10</div>
+
+          <div>
+
+            <h2>
+              <span class="en">Download the Video</span>
+              <span class="id">Download Video nya</span>
+            </h2>
+
+            <p class="en">
+              Replace VIDEO_URL with the actual URL.
+            </p>
+
+            <p class="id">
+              Ganti VIDEO_URL dengan URL yang ingin didownload.
+            </p>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>python -m yt_dlp --cookies cookies.txt --remote-components ejs:npm -f "bv*+ba/b" --merge-output-format mp4 "VIDEO_URL"</code></pre>
+            </div>
+
+            <p class="en">
+              Make sure FFmpeg is available, yt-dlp can combine separate
+              video and audio streams when the download is completed.
+            </p>
+
+            <p class="id">
+              Pastikan FFmpeg tersedia, yt-dlp dapat menggabungkan stream
+              video dan audio terpisah apabila selesai mendownload.
+            </p>
+
+            <div class="notice">
+
+              <strong>
+                ⚠️
+                <span class="en">Warning:</span>
+                <span class="id">Peringatan:</span>
+              </strong>
+
+              <span class="en">
+                One Membership video requires cookies in the currently open tab.
+                If you want to download another video, export the cookies in the other tab.
+              </span>
+
+              <span class="id">
+                Satu video Membership membutuhkan cookies di tab yang sedang dibuka,
+                jika ingin mendownload video yang lain maka ekspor cookies di tab
+                lainnya.
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- SPECIFIC FOLDER -->
+
+      <section id="folder">
+
+        <h2>
+          📁
+          <span class="en">
+            Download Videos to a Specific Folder
+          </span>
+
+          <span class="id">
+            Download Video ke Folder Tertentu
+          </span>
+        </h2>
+
+        <p class="en">
+          By default, downloaded files are saved in the current
+          working directory.
+        </p>
+
+        <p class="id">
+          Secara default, file hasil download disimpan di folder
+          tempat command dijalankan.
+        </p>
+
+        <p class="en">Create a dedicated folder:</p>
+        <p class="id">Buat folder khusus:</p>
+
+        <div class="code-block">
+          <pre><button class="copy" type="button">Copy</button><code>mkdir MyVideos
+cd MyVideos</code></pre>
+        </div>
+
+        <p class="en">
+          You can also specify an output template directly:
+        </p>
+
+        <p class="id">
+          Kamu juga dapat menentukan lokasi output secara langsung:
+        </p>
+
+        <div class="code-block">
+          <pre><button class="copy" type="button">Copy</button><code>python -m yt_dlp -o "MyVideos/%(title)s.%(ext)s" "VIDEO_URL"</code></pre>
+        </div>
+
+        <p>
+          <strong>
+            <span class="en">Example structure:</span>
+            <span class="id">Contoh struktur:</span>
+          </strong>
+        </p>
+
+        <div class="code-block">
+          <pre><code>Downloads
+└── MyVideos
+    ├── video-1.mp4
+    ├── video-2.mp4
+    └── video-3.mp4</code></pre>
+        </div>
+
+      </section>
+
+      <!-- TUTORIAL -->
+
+      <!-- <section id="tutorial">
+
+        <h2>
+          🎥
+          <span class="en">Video Tutorial</span>
+          <span class="id">Video Tutorial</span>
+        </h2>
+
+        <p class="en">
+          A tutorial video can be placed here to demonstrate the usage process.
+        </p>
+
+        <p class="id">
+          Video tutorial dapat ditempatkan di sini untuk menunjukkan
+          proses penggunaan.
+        </p>
+
+        <div class="video-placeholder">
+
+          <span class="coming">
+            Coming Soon
+          </span>
+
+        </div>
+
+      </section> -->
+
+      <!-- FAQ -->
+
+      <section id="faq">
+
+        <h2>❓ Frequently Asked Questions (FAQ)</h2>
+
+        <details>
+
+          <summary>
+            Q: ffmpeg is installed but Windows says
+            "ffmpeg is not recognized"?
+          </summary>
+
+          <div class="answer">
+
+            <p class="en">
+              Close all PowerShell/CMD windows and open a new terminal.
+              This allows Windows to load the updated PATH.
+            </p>
+
+            <p class="id">
+              Tutup semua PowerShell/CMD lalu buka terminal baru.
+              Ini memungkinkan Windows membaca PATH yang telah diperbarui.
+            </p>
+
+          </div>
+
+        </details>
+
+        <details>
+
+          <summary>
+            Q: npm gives an Execution Policy error?
+          </summary>
+
+          <div class="answer">
+
+            <p class="en">
+              On Windows PowerShell, try the Windows command wrapper:
+            </p>
+
+            <p class="id">
+              Di Windows PowerShell, coba gunakan command wrapper Windows:
+            </p>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>npm.cmd --version</code></pre>
+            </div>
+
+          </div>
+
+        </details>
+
+        <details>
+
+          <summary>
+            Q: yt-dlp is not recognized?
+          </summary>
+
+          <div class="answer">
+
+            <p class="en">
+              Use the Python module form instead of relying on the
+              yt-dlp executable being present in PATH.
+            </p>
+
+            <p class="id">
+              Gunakan format Python module daripada bergantung pada
+              executable yt-dlp yang tersedia di PATH.
+            </p>
+
+            <div class="code-block">
+              <pre><button class="copy" type="button">Copy</button><code>python -m yt_dlp --version</code></pre>
+            </div>
+
+          </div>
+
+        </details>
+
+        <details>
+
+          <summary>
+            Q: Do I need Deno?
+          </summary>
+
+          <div class="answer">
+
+            <p class="en">
+              Not necessarily. Different yt-dlp configurations may use
+              different JavaScript runtimes. Node.js is commonly useful,
+              while Deno is an alternative runtime.
+            </p>
+
+            <p class="id">
+              Tidak selalu. Konfigurasi yt-dlp yang berbeda dapat
+              menggunakan JavaScript runtime yang berbeda. Node.js
+              umum digunakan, sedangkan Deno merupakan alternatif.
+            </p>
+
+          </div>
+
+        </details>
+
+        <details>
+
+          <summary>
+            Q: Can I keep the downloaded videos forever?
+          </summary>
+
+          <div class="answer">
+
+            <p class="en">
+              Downloaded files stay on your computer until you delete them. Make sure you have enough disk space because large playlists can consume many gigabytes.
+            </p>
+
+            <p class="id">
+              File yang diunduh akan tetap tersimpan di komputer Anda hingga Anda menghapusnya. Pastikan Anda memiliki ruang disk yang cukup karena playlist yang besar dapat menghabiskan banyak gigabyte.
+            </p>
+
+          </div>
+
+        </details>
+
+        <details>
+
+          <summary>
+            Q: How much storage do I need?
+          </summary>
+
+          <div class="answer">
+
+            <p class="en">
+              Storage requirements depend on resolution, codec,
+              bitrate, duration, and the number of videos.
+            </p>
+
+            <p class="id">
+              Kebutuhan storage bergantung pada resolusi, codec,
+              bitrate, durasi, dan jumlah video.
+            </p>
+
+          </div>
+
+        </details>
+
+      </section>
+
+      <!-- DISCLAIMER -->
+
+      <section id="disclaimer">
+
+        <h2>⚖️ Disclaimer</h2>
+
+        <p class="en">
+          This guide is intended for educational and legitimate use.
+          You are responsible for complying with applicable copyright
+          laws, creator permissions, licenses, and platform Terms of
+          Service. Do not use these tools to bypass access controls,
+          DRM, or other technical restrictions.
+        </p>
+
+        <p class="id">
+          Panduan ini ditujukan untuk penggunaan edukatif dan sah.
+          Kamu bertanggung jawab untuk mematuhi hukum hak cipta,
+          izin kreator, lisensi, dan Terms of Service platform yang
+          berlaku. Jangan gunakan tools ini untuk melewati kontrol
+          akses, DRM, atau pembatasan teknis lainnya.
+        </p>
+
+      </section>
+
+      <!-- FOOTER -->
+
+      <footer>
+
+        <span class="en">
+          Made for educational purposes • Use responsibly
+        </span>
+
+        <span class="id">
+          Dibuat untuk tujuan edukasi • Gunakan dengan bertanggung jawab
+        </span>
+
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script>
+    "use strict";
+
+    const STORAGE_KEY = "guideLanguage";
+
+    const body = document.body;
+    const idButton = document.getElementById("idBtn");
+    const enButton = document.getElementById("enBtn");
+
+    /**
+     * Change page language.
+     */
+    function setLanguage(lang) {
+      if (lang !== "id" && lang !== "en") {
+        lang = "en";
+      }
+
+      body.classList.remove("lang-id", "lang-en");
+      body.classList.add(`lang-${lang}`);
+
+      idButton.classList.toggle("active", lang === "id");
+      enButton.classList.toggle("active", lang === "en");
+
+      idButton.setAttribute("aria-pressed", lang === "id");
+      enButton.setAttribute("aria-pressed", lang === "en");
+
+      document.documentElement.lang = lang;
+
+      try {
+        localStorage.setItem(STORAGE_KEY, lang);
+      } catch (error) {
+        console.warn("Unable to save language preference.", error);
+      }
+    }
+
+    /**
+     * Load saved language preference.
+     */
+    function loadLanguage() {
+      let savedLanguage = "en";
+
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+
+        if (stored === "id" || stored === "en") {
+          savedLanguage = stored;
+        }
+      } catch (error) {
+        console.warn("Unable to read language preference.", error);
+      }
+
+      setLanguage(savedLanguage);
+    }
+
+    /**
+     * Fallback clipboard method for older browsers.
+     */
+    function fallbackCopy(text) {
+      const textarea = document.createElement("textarea");
+
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      textarea.style.top = "0";
+
+      document.body.appendChild(textarea);
+
+      textarea.focus();
+      textarea.select();
+
+      let successful = false;
+
+      try {
+        successful = document.execCommand("copy");
+      } catch (error) {
+        successful = false;
+      }
+
+      textarea.remove();
+
+      return successful;
+    }
+
+    /**
+     * Copy a code block.
+     */
+    async function copyCode(button) {
+      const code = button.parentElement.querySelector("code");
+
+      if (!code) {
+        return;
+      }
+
+      const text = code.innerText;
+      const originalText = button.innerText;
+
+      try {
+        if (
+          navigator.clipboard &&
+          window.isSecureContext
+        ) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const copied = fallbackCopy(text);
+
+          if (!copied) {
+            throw new Error("Clipboard copy failed.");
+          }
+        }
+
+        button.innerText = "Copied!";
+        button.classList.add("copied");
+
+      } catch (error) {
+
+        console.error(error);
+
+        button.innerText = "Failed";
+
+      }
+
+      window.setTimeout(() => {
+        button.innerText = originalText;
+        button.classList.remove("copied");
+      }, 1200);
+    }
+
+    /**
+     * Initialize copy buttons.
+     */
+    function initializeCopyButtons() {
+      document.querySelectorAll(".copy").forEach((button) => {
+        button.addEventListener("click", () => {
+          copyCode(button);
+        });
+      });
+    }
+
+    /**
+     * Initialize page.
+     */
+    function initialize() {
+      loadLanguage();
+      initializeCopyButtons();
+    }
+
+    initialize();
+  </script>
+
+</body>
+
+</html>
